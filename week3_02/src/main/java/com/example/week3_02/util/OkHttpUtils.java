@@ -103,15 +103,19 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Gson gson = new Gson();
-                final Object o = gson.fromJson(result, clazz);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        iCallBack.success(o);
-                    }
-                });
+                try {
+                    String result = response.body().string();
+                    Gson gson = new Gson();
+                    final Object o = gson.fromJson(result, clazz);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            iCallBack.success(o);
+                        }
+                    });
+                }catch (Exception e){
+                    iCallBack.faniled(e);
+                }
             }
         });
     }
